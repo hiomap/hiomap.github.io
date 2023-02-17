@@ -151,7 +151,7 @@ label:hover {
     display: grid;
     grid-template-rows: repeat(auto-fill, 65px);
         
-    grid-template-columns: 65px 65px 65px 65px 65px 65px 65px;
+    grid-template-columns: 65px 65px 65px 65px 65px 65px;
      grid-gap: 3px;
 }
 
