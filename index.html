@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Hell Is Others Map</title>
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="leaflet-sidebar.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-      <div id="sidebar" class="sidebar collapsed">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="leaflet-sidebar.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="map" class="sidebar-map"></div>
+    <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
@@ -27,24 +30,38 @@
                     Loot Containers
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-				
-				<div class="button-list">
-					<input type="button" id="Btn2" value="Show all" onclick="checkAll(true)" class="button-6"/> 
-					<input type="button" id="Btn3" value="Hide all" onclick="checkAll(false)" class="button-6"/> 
-				</div>
 
-<div class="lootlist">
+                <div class="button-list">
+                    <input type="button" id="Btn2" value="Show all" onclick="checkAll(true)" class="button-6" />
+                    <input type="button" id="Btn3" value="Hide all" onclick="checkAll(false)" class="button-6" />
+                </div>
 
-</div>
+
+
+                <div class="search-text">
+                    <span>Search item:</span>
+                    <img id="selectSearchItem" onclick="toggleModal()" />
+                </div>
+
+
+                <div class="lootlist">
+
+                </div>
             </div>
         </div>
     </div>
-  
-    <div id="map" class="sidebar-map"></div>
-	 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-	<script src="https://unpkg.com/leaflet-path-transform@1.8.0-beta.4/dist/L.Path.Transform.js"></script>
-		
+
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleModal()">&times;</span>
+            <h2 class="select-text">Choose item to search:</h2>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-path-transform@1.8.0-beta.4/dist/L.Path.Transform.js"></script>
+
     <script src="leaflet-sidebar.min.js"></script>
-	<script src="mapscript.js"></script>
-  </body>
+    <script src="mapscript.js"></script>
+</body>
+
 </html>

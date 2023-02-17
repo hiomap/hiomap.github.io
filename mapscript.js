@@ -48,9 +48,10 @@ const getJSON = async url => {
 
 let rects = {};
 let toggled = true;
+let containers, lootList, items;
 
 Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.json")]).then((values) => {
-    let [containers, lootList, items] = values;
+    [containers, lootList, items] = values;
 
     for (let container of containers) {
         let tooltip = '<div class="loot-tooltip">';
@@ -78,39 +79,38 @@ Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.js
         try { rect.transform.rotate(-container.r, [container.center[0], container.center[1]]); } catch (e) { }
     }
 
-    let htmlList = "";
-    for (let lootId in lootList) {
-        let loot = lootList[lootId];
-        let containersAmount = rects[lootId].length;
-        htmlList += '<label><input type="checkbox" id="' + lootId + '" checked="checked" onchange="toggleContainer(this)">' + loot.name + ' (' + containersAmount + ')</label><br>';
+    fillLootList(lootList, false);
+
+    let itemList = '<div class="itemList">';
+    for (let itemId in items) {
+        itemList += '  <div class="box r' + items[itemId].r + ' itemIconChoose" onclick="chooseSearchItem(this)" itemid="' + itemId + '"><img src="icons/' + items[itemId].ic + '"/></div>';
     }
-    document.getElementsByClassName('lootlist')[0].innerHTML = htmlList;
-
-    a = document.getElementsByTagName('label')
-    for (i in a) {
-        a[i].onmouseover = function () {
-            let lootIdRects = rects[this.getElementsByTagName("input")[0].id];
-            for (let rectObj of lootIdRects) {
-                resizeRect(rectObj, 5, '#0a62ad');
-
-                if (!map.hasLayer(rectObj.mapRect)) {
-                    rectObj.mapRect.addTo(map);
-                }
-            }
-        }
-        a[i].onmouseout = function () {
-            let checkbox = this.getElementsByTagName("input")[0];
-            let lootIdRects = rects[checkbox.id];
-            for (let rectObj of lootIdRects) {
-                resizeRect(rectObj, 1, '#ff7800');
-
-                if (!checkbox.checked && map.hasLayer(rectObj.mapRect)) {
-                    rectObj.mapRect.remove(map);
-                }
-            }
-        }
-    }
+    itemList += '</div>';
+    document.getElementsByClassName('modal-content')[0].innerHTML += itemList;
 });
+
+function onOverLabel(label) {
+    let lootIdRects = rects[label.getElementsByTagName("input")[0].id];
+    for (let rectObj of lootIdRects) {
+        resizeRect(rectObj, 6, '#0a62ad');
+
+        if (!map.hasLayer(rectObj.mapRect)) {
+            rectObj.mapRect.addTo(map);
+        }
+    }
+}
+
+function onOutLabel(label) {
+    let checkbox = label.getElementsByTagName("input")[0];
+    let lootIdRects = rects[checkbox.id];
+    for (let rectObj of lootIdRects) {
+        resizeRect(rectObj, 1, '#ff7800');
+
+        if (!checkbox.checked && map.hasLayer(rectObj.mapRect)) {
+            rectObj.mapRect.remove(map);
+        }
+    }
+}
 
 function resizeRect(rectObj, multiple, color) {
     let c1 = [rectObj.center[0] + rectObj.size[0] * multiple, rectObj.center[1] + rectObj.size[1] * multiple];
@@ -120,10 +120,10 @@ function resizeRect(rectObj, multiple, color) {
     rectObj.mapRect.setStyle({ color: color });
 }
 
-function toggleContainer(checkboxElem) {
-    let lootIdRects = rects[checkboxElem.id];
+function toggleContainer(id, checked) {
+    let lootIdRects = rects[id];
     for (let rectObj of lootIdRects) {
-        checkboxElem.checked ? rectObj.mapRect.addTo(map) : rectObj.mapRect.remove(map);
+        checked ? rectObj.mapRect.addTo(map) : rectObj.mapRect.remove(map);
     }
 }
 
@@ -136,4 +136,58 @@ function checkAll(isAllCheck) {
             isAllCheck ? rectObj.mapRect.addTo(map) : rectObj.mapRect.remove(map);
         }
     }
+}
+
+const modal = document.querySelector(".modal");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+window.addEventListener("click", windowOnClick);
+
+function chooseSearchItem(elem) {
+    let itemId = elem.getAttribute("itemid");
+    toggleModal();
+    let imageSlotSearch = document.getElementById("selectSearchItem");
+    imageSlotSearch.src = "icons/" + items[itemId].ic;
+    imageSlotSearch.className = "r" + items[itemId].r;
+
+    let containersWithItem = {};
+    for (let lootId in lootList) {
+        let loot = lootList[lootId].loot;
+        for (let item of loot) {
+            if (item[0] == itemId) {
+                containersWithItem[lootId] = item[2];
+                break;
+            }
+        }
+    }
+
+    const chanceSorted = Object.fromEntries(Object.entries(containersWithItem).sort(([, a], [, b]) => b - a));
+    console.log(chanceSorted);
+
+    checkAll(false);
+    fillLootList(chanceSorted, true);
+}
+
+function fillLootList(list, withChances) {
+    let htmlLootList = "";
+    for (let lootId in list) {
+        let loot = lootList[lootId];
+        let containersAmount = rects[lootId].length;
+        let chanceString = "";
+        if (withChances) {
+            toggleContainer(lootId, true);
+            chanceString = '<span class="container-chance">' + list[lootId] + '%</span>';
+        }
+        htmlLootList += '<label onmouseover="onOverLabel(this)" onmouseout="onOutLabel(this)"><input type="checkbox" id="' + lootId + '" checked="checked" onchange="toggleContainer(this.id, this.checked)">' + loot.name + ' (' + containersAmount + ')' + chanceString + '</label><br>';
+    }
+    document.getElementsByClassName('lootlist')[0].innerHTML = htmlLootList;
 }
