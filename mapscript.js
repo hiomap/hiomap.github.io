@@ -92,12 +92,21 @@ Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.js
             let lootIdRects = rects[this.getElementsByTagName("input")[0].id];
             for (let rectObj of lootIdRects) {
                 resizeRect(rectObj, 5, '#0a62ad');
+
+                if (!map.hasLayer(rectObj.mapRect)) {
+                    rectObj.mapRect.addTo(map);
+                }
             }
         }
         a[i].onmouseout = function () {
-            let lootIdRects = rects[this.getElementsByTagName("input")[0].id];
+            let checkbox = this.getElementsByTagName("input")[0];
+            let lootIdRects = rects[checkbox.id];
             for (let rectObj of lootIdRects) {
                 resizeRect(rectObj, 1, '#ff7800');
+
+                if (!checkbox.checked && map.hasLayer(rectObj.mapRect)) {
+                    rectObj.mapRect.remove(map);
+                }
             }
         }
     }
