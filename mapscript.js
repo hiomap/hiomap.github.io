@@ -92,7 +92,7 @@ Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.js
 function onOverLabel(label) {
     let lootIdRects = rects[label.getElementsByTagName("input")[0].id];
     for (let rectObj of lootIdRects) {
-        resizeRect(rectObj, 6, '#0a62ad');
+        resizeRect(rectObj, 8, '#0a62ad');
 
         if (!map.hasLayer(rectObj.mapRect)) {
             rectObj.mapRect.addTo(map);
