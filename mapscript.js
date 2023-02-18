@@ -180,7 +180,6 @@ function chooseSearchItem(elem) {
     }
 
     const chanceSorted = Object.fromEntries(Object.entries(containersWithItem).sort(([, a], [, b]) => b - a));
-    console.log(chanceSorted);
 
     checkAll(false);
     fillLootList(chanceSorted, true);
