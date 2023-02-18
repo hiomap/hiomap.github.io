@@ -128,12 +128,21 @@ function toggleContainer(id, checked) {
 }
 
 function checkAll(isAllCheck) {
-    document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = isAllCheck);
+    document.querySelectorAll('input[type=checkbox]').forEach(el => {
+        el.checked = isAllCheck
+        if (isAllCheck) {
+            for (let rectObj of rects[el.id]) {
+                rectObj.mapRect.addTo(map);
+            }
+        }
+    });
 
-    for (let lootId in rects) {
-        let lootIdRects = rects[lootId];
-        for (let rectObj of lootIdRects) {
-            isAllCheck ? rectObj.mapRect.addTo(map) : rectObj.mapRect.remove(map);
+    if (!isAllCheck) {
+        for (let lootId in rects) {
+            let lootIdRects = rects[lootId];
+            for (let rectObj of lootIdRects) {
+                rectObj.mapRect.remove(map);
+            }
         }
     }
 }
