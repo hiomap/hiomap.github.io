@@ -195,7 +195,7 @@ function fillLootList(list, withChances) {
             toggleContainer(lootId, true);
             chanceString = '<span class="container-chance">' + list[lootId] + '%</span>';
         }
-        htmlLootList += '<label onmouseover="onOverLabel(this)" onmouseout="onOutLabel(this)"><input type="checkbox" id="' + lootId + '" checked="checked" onchange="toggleContainer(this.id, this.checked)">' + loot.name + ' (' + containersAmount + ')' + chanceString + '</label><br>';
+        htmlLootList += '<label onmouseover="onOverLabel(this)" onmouseout="onOutLabel(this)"><input type="checkbox" id="' + lootId + '" checked="checked" onchange="toggleContainer(this.id, this.checked)">' + loot.name + ' [' + containersAmount + ']' + chanceString + '</label><br>';
     }
     document.getElementsByClassName('lootlist')[0].innerHTML = htmlLootList;
 }
