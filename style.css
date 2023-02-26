@@ -79,8 +79,8 @@ label:hover {
 	cursor: pointer;
 	border: 3px solid #555;
 	margin: 0px 0px 0px 15px;
-	width: 66px;
-	height: 66px;
+	width: 64px;
+	height: 64px;
 }
 
 .search-text  {
@@ -151,6 +151,7 @@ label:hover {
     display: grid;
     grid-template-rows: repeat(auto-fill, 65px);
         
+	/*grid-template-columns: repeat(auto-fill, 65px);*/
     grid-template-columns: 65px 65px 65px 65px 65px 65px;
      grid-gap: 3px;
 }
@@ -229,4 +230,16 @@ label:hover {
 .container-chance {
     float: right;
     margin-right: 10px;
+}
+
+.clearSearch {
+	font-size: 2.0em;
+	margin-left: 10px;
+	color: #f75464;
+	cursor: pointer;
+	border: 1px solid rgba(0, 0, 0, 1);
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
 }

@@ -79,11 +79,11 @@ Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.js
         try { rect.transform.rotate(-container.r, [container.center[0], container.center[1]]); } catch (e) { }
     }
 
-    fillLootList(lootList, false);
+    fillLootList(lootList, false, false);
 
     let itemList = '<div class="itemList">';
     for (let itemId in items) {
-        itemList += '  <div class="box r' + items[itemId].r + ' itemIconChoose" onclick="chooseSearchItem(this)" itemid="' + itemId + '"><img src="icons/' + items[itemId].ic + '"/></div>';
+        itemList += '  <div class="box r' + items[itemId].r + ' itemIconChoose" onclick="chooseSearchItem(this)" title="' + items[itemId].name + '" itemid="' + itemId + '"><img src="icons/' + items[itemId].ic + '"/></div>';
     }
     itemList += '</div>';
     document.getElementsByClassName('modal-content')[0].innerHTML += itemList;
@@ -164,9 +164,12 @@ window.addEventListener("click", windowOnClick);
 function chooseSearchItem(elem) {
     let itemId = elem.getAttribute("itemid");
     toggleModal();
-    let imageSlotSearch = document.getElementById("selectSearchItem");
+    let imageSlotSearch = document.getElementById("searchImage");
+    imageSlotSearch.style.display = "block";
     imageSlotSearch.src = "icons/" + items[itemId].ic;
     imageSlotSearch.className = "r" + items[itemId].r;
+
+    document.getElementById("clearSearch").style.display = "flex";
 
     let containersWithItem = {};
     for (let lootId in lootList) {
@@ -182,20 +185,28 @@ function chooseSearchItem(elem) {
     const chanceSorted = Object.fromEntries(Object.entries(containersWithItem).sort(([, a], [, b]) => b - a));
 
     checkAll(false);
-    fillLootList(chanceSorted, true);
+    fillLootList(chanceSorted, true, true);
 }
 
-function fillLootList(list, withChances) {
+function fillLootList(list, withChances, toggle) {
     let htmlLootList = "";
     for (let lootId in list) {
         let loot = lootList[lootId];
         let containersAmount = rects[lootId].length;
         let chanceString = "";
-        if (withChances) {
-            toggleContainer(lootId, true);
-            chanceString = '<span class="container-chance">' + list[lootId] + '%</span>';
-        }
+
+        if (toggle) toggleContainer(lootId, true);
+        if (withChances) chanceString = '<span class="container-chance">' + list[lootId] + '%</span>';
+
         htmlLootList += '<label onmouseover="onOverLabel(this)" onmouseout="onOutLabel(this)"><input type="checkbox" id="' + lootId + '" checked="checked" onchange="toggleContainer(this.id, this.checked)">' + loot.name + ' [' + containersAmount + ']' + chanceString + '</label><br>';
     }
     document.getElementsByClassName('lootlist')[0].innerHTML = htmlLootList;
+}
+
+function clearSearch() {
+    fillLootList(lootList, false, true);
+    let imageSlotSearch = document.getElementById("searchImage");
+    imageSlotSearch.style.display = "none";
+
+    document.getElementById("clearSearch").style.display = "none";
 }
