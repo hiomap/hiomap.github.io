@@ -40,7 +40,7 @@
 
                 <div class="search-text">
                     <span>Search item:</span>
-                    <div id="selectSearchItem" onclick="toggleModal()"/><img id="searchImage" style="display:none;"/></div>
+                    <div id="selectSearchItem" onclick="showModal()"/><img id="searchImage" style="display:none;"/></div>
 					<i id="clearSearch" title="Clear search" class="fa fa-times clearSearch" onclick="clearSearch()" style="display:none;"></i>
                 </div>
 
@@ -55,7 +55,9 @@
     <div class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="toggleModal()">&times;</span>
-            <h2 class="select-text">Choose item to search:</h2>
+            <h2 class="select-text">Choose item to search</h2>
+			<input class="inputSearch" id="inputSearch" onKeyUp="return searchHandler(this)"/>
+			<div class="itemList"></div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>

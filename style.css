@@ -140,6 +140,7 @@ label:hover {
 
 .select-text {
     text-align: center;
+	margin-top: 0px;
 }
 
 .itemList {
@@ -198,6 +199,7 @@ label:hover {
     padding: 1rem 1.5rem;
     /*width: 24rem;*/
     border-radius: 0.5rem;
+	box-sizing: border-box;
 }
 
 
@@ -242,4 +244,11 @@ label:hover {
 	height: 40px;
 	display: flex;
 	justify-content: center;
+}
+
+.inputSearch {
+	width: 100%;
+	box-sizing: border-box;
+	cursor: text;
+	margin-bottom: 4px;
 }

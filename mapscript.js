@@ -80,14 +80,16 @@ Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.js
     }
 
     fillLootList(lootList, false, false);
-
-    let itemList = '<div class="itemList">';
-    for (let itemId in items) {
-        itemList += '  <div class="box r' + items[itemId].r + ' itemIconChoose" onclick="chooseSearchItem(this)" title="' + items[itemId].name + '" itemid="' + itemId + '"><img src="icons/' + items[itemId].ic + '"/></div>';
-    }
-    itemList += '</div>';
-    document.getElementsByClassName('modal-content')[0].innerHTML += itemList;
+    fillItemList(items);
 });
+
+function fillItemList(itemsToFill) {
+    let itemList = '';
+    for (let itemId in itemsToFill) {
+        itemList += '  <div class="box r' + itemsToFill[itemId].r + ' itemIconChoose" onclick="chooseSearchItem(this)" title="' + itemsToFill[itemId].name + '" itemid="' + itemId + '"><img src="icons/' + itemsToFill[itemId].ic + '"/></div>';
+    }
+    document.getElementsByClassName('itemList')[0].innerHTML = itemList;
+}
 
 function onOverLabel(label) {
     let lootIdRects = rects[label.getElementsByTagName("input")[0].id];
@@ -153,17 +155,22 @@ function toggleModal() {
     modal.classList.toggle("show-modal");
 }
 
+function showModal() {
+    toggleModal();
+    document.getElementById("inputSearch").focus();
+}
+
 function windowOnClick(event) {
     if (event.target === modal) {
         toggleModal();
     }
 }
-
-window.addEventListener("click", windowOnClick);
+addEventListener("mousedown", windowOnClick);
 
 function chooseSearchItem(elem) {
     let itemId = elem.getAttribute("itemid");
     toggleModal();
+
     let imageSlotSearch = document.getElementById("searchImage");
     imageSlotSearch.style.display = "block";
     imageSlotSearch.src = "icons/" + items[itemId].ic;
@@ -209,4 +216,9 @@ function clearSearch() {
     imageSlotSearch.style.display = "none";
 
     document.getElementById("clearSearch").style.display = "none";
+}
+
+function searchHandler(e) {
+    let filtered = Object.fromEntries(Object.entries(items).filter(([key, value]) => { return value.name.toLowerCase().includes(e.value) }));
+    fillItemList(filtered);
 }
