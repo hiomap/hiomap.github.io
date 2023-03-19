@@ -25,16 +25,18 @@ layer = L.tileLayer('{z}/{x}/{y}.png', {
     tileSize: L.point(512, 512),
     noWrap: true,
     tms: false,
+    attribution: 'HIO 1.5.16'
 }).addTo(map);
 map.fitBounds([
     crs.unproject(L.point(mapExtent[2], mapExtent[3])),
     crs.unproject(L.point(mapExtent[0], mapExtent[1]))
 ]);
 
-map.zoomControl.remove();
+// map.zoomControl.remove();
 L.control.zoom({
-    position: 'bottomleft'
+    position: 'topright'
 }).addTo(map);
+
 var sidebar = L.control.sidebar('sidebar').addTo(map);
 if (document.body.clientWidth >= 768) {
     sidebar.open("home");
