@@ -25,7 +25,7 @@ layer = L.tileLayer('{z}/{x}/{y}.png', {
     tileSize: L.point(512, 512),
     noWrap: true,
     tms: false,
-    attribution: 'HIO 2.0.2'
+    attribution: 'HIO 2.0.3'
 }).addTo(map);
 map.fitBounds([
     crs.unproject(L.point(mapExtent[2], mapExtent[3])),
