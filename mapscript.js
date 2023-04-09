@@ -25,7 +25,7 @@ layer = L.tileLayer('{z}/{x}/{y}.png', {
     tileSize: L.point(512, 512),
     noWrap: true,
     tms: false,
-    attribution: 'HIO 1.5.16'
+    attribution: 'HIO 2.0.2'
 }).addTo(map);
 map.fitBounds([
     crs.unproject(L.point(mapExtent[2], mapExtent[3])),
@@ -51,8 +51,12 @@ const getJSON = async url => {
 let rects = {};
 let toggled = true;
 let containers, lootList, items;
+let isSolo = window.location.pathname == "/solo";
+document.getElementsByClassName('sidebar-header')[0].innerText = isSolo ? "Singleplayer Loot Containers" : "Multiplayer Loot Containers";
+document.getElementsByClassName('switchLink')[0].href = isSolo ? "/" : "/solo";
+document.getElementsByClassName('switchLink')[0].innerText = isSolo ? "(Switch to multiplayer)" : "(Switch to singleplayer)";
 
-Promise.all([getJSON("containers.json"), getJSON("loot.json"), getJSON("items.json")]).then((values) => {
+Promise.all([getJSON(isSolo ? "containers-single.json" : "containers.json"), getJSON(isSolo ? "loot-single.json" : "loot.json"), getJSON("items.json")]).then((values) => {
     [containers, lootList, items] = values;
 
     for (let container of containers) {
